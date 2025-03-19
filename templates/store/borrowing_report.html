@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-4">📊 Book Borrowing Analytics</h2>
+
+    <h3>📚 Most Borrowed Books</h3>
+    <table class="table table-striped" align="center">
+        <thead>
+            <tr>
+                <th>Book Name</th>
+                <th>Borrow Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in book_borrowing_data %}
+            <tr>
+                <td>{{ data.book__name }}</td>
+                <td>{{ data.borrow_count }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">No data available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>✍️ Most Popular Authors</h3>
+    <table class="table table-striped" align="center">
+        <thead>
+            <tr>
+                <th>Author Name</th>
+                <th>Borrow Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in author_borrowing_data %}
+            <tr>
+                <td>{{ data.book__author }}</td>
+                <td>{{ data.borrow_count }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">No data available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>🏷️ Most Popular Categories</h3>
+    <table class="table table-striped" align="center">
+        <thead>
+            <tr>
+                <th>Category Name</th>
+                <th>Borrow Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in category_borrowing_data %}
+            <tr>
+                <td>{{ data.book__category }}</td>
+                <td>{{ data.borrow_count }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">No data available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

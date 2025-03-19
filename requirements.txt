@@ -1,7 +1,9 @@
-asgiref==3.2.7
-Django==3.0.5
+asgiref==3.8.1
+Django==5.1.7
 django-widget-tweaks==1.4.8
+Faker==37.0.2
 pytz==2020.1
 setuptools==76.1.0
 sqlparse==0.3.1
+tzdata==2025.1
 wheel==0.45.1

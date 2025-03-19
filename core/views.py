@@ -8,6 +8,11 @@ from django.contrib import messages
 from django.utils import timezone
 from datetime import timedelta, datetime
 from django.contrib.auth.models import User
+from django.contrib import admin
+from django.urls import path
+from django.shortcuts import render
+from django.db.models import Count
+
 
 from .models import (
     Book,
@@ -75,3 +80,22 @@ def borrowed_books(request):
     borrowed_books = IssuedBook.objects.filter(student=student)
 
     return render(request, 'store/borrowed.html', {'borrowed_books': borrowed_books})
+
+def get_borrowing_statistics(field_name):
+    """ Helper function to generate borrowing statistics """
+    return (
+        IssuedBook.objects.values(field_name)
+        .annotate(borrow_count=Count(field_name))
+        .order_by('-borrow_count')
+    )
+
+def book_borrowing_analytics(request):
+    """ Fetch analytics: most borrowed books, authors, and categories """
+
+    context = {
+        "book_borrowing_data": IssuedBook.objects.values('book__name').annotate(borrow_count=Count('book')).order_by('-borrow_count'),
+        "author_borrowing_data": IssuedBook.objects.values('book__author').annotate(borrow_count=Count('book__author')).order_by('-borrow_count'),
+        "category_borrowing_data": IssuedBook.objects.values('book__category').annotate(borrow_count=Count('book__category')).order_by('-borrow_count'),
+    }
+
+    return render(request, "store/borrowing_report.html", context)

@@ -5,7 +5,8 @@ from core.views import (
     home_view,
     register,
     borrow_book,
-    borrowed_books
+    borrowed_books,
+    book_borrowing_analytics
     )
 
 urlpatterns = [
@@ -16,6 +17,7 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('borrow/<int:book_id>/', borrow_book, name='borrow'),
     path('borrowed/', borrowed_books, name='borrowed'),
+    path("analytics/", book_borrowing_analytics, name="analytics"),
     path('', home_view, name='home'),
 
 ]

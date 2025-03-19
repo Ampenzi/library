@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Book,IssuedBook
+
 # Register your models here.
 class BookAdmin(admin.ModelAdmin):
     model = Book
@@ -11,4 +12,3 @@ class IssuedBookAdmin(admin.ModelAdmin):
     list_display = ['student', 'book', 'expirydate']
     
 admin.site.register(IssuedBook, IssuedBookAdmin)
-
