@@ -1,16 +1,14 @@
 from django.contrib import admin
-from .models import Book,StudentExtra,IssuedBook
+from .models import Book,IssuedBook
 # Register your models here.
 class BookAdmin(admin.ModelAdmin):
-    pass
+    model = Book
+    list_display = ['name', 'category', 'author', 'isbn']
 admin.site.register(Book, BookAdmin)
 
-
-class StudentExtraAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(StudentExtra, StudentExtraAdmin)
-
-
 class IssuedBookAdmin(admin.ModelAdmin):
-    pass
+    model = IssuedBook
+    list_display = ['student', 'book', 'expirydate']
+    
 admin.site.register(IssuedBook, IssuedBookAdmin)
+
