@@ -1,0 +1,62 @@
+pipeline {
+    agent any
+    stages {
+        stage('Security Scan - Static Code Analysis') {
+            steps {
+                script {
+                    def scanner = tool name: 'SonarScanner', type: 'org.jenkinsci.plugins.sonarsource.scanner.SonarScannerInstallation'
+                    withSonarQubeEnv('your-sonarqube-server') {
+                        sh "${scanner}/bin/sonar-scanner -Dsonar.projectKey=your-project-key -Dsonar.sources=. -Dsonar.host.url=your-sonarqube-url -Dsonar.login=your-sonarqube-token"
+                    }
+                }
+            }
+        }
+        stage('Security Scan - Dependency Check') {
+            steps {
+                dependencyCheck additionalArguments: '--enableExperimental', odcInstallation: 'Dependency-Check', scanPath: '.'
+            }
+        }
+        stage('Security Scan - Secret Scanning') {
+            steps {
+                script {
+                    sh 'gitleaks --verbose --redact --report-format json --report-path gitleaks-report.json'
+                }
+            }
+        }
+        stage('Security Scan - Container Image Scan (if applicable)') {
+            when {
+                expression { env.DOCKERFILE != null }
+            }
+            steps {
+                script {
+                    sh 'docker build -t my-image .'
+                    sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL my-image'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                // Your build steps here (e.g., mvn clean install)
+                echo 'Building the application...'
+            }
+        }
+        stage('Test') {
+            steps {
+                // Your test steps here (e.g., mvn test)
+                echo 'Running unit tests...'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                // Your deployment steps here
+                echo 'Deploying the application...'
+            }
+        }
+
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: 'gitleaks-report.json', allowEmptyArchive: true
+        }
+    }
+}
