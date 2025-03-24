@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('Security Scan - Static Code Analysis') {
+        stage('Security Scan - Static Code Analysis (SAST)') {
             steps {
                 script {
                     def scanner = tool name: 'SonarScanner', type: 'org.jenkinsci.plugins.sonarsource.scanner.SonarScannerInstallation'
